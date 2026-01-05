@@ -1,0 +1,7 @@
+{
+  "name": "AutoZap AI",
+  "description": "Powerful WhatsApp conversation automation platform powered by Gemini. Manage agents, automate replies, and scale your business communications.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
