@@ -1,0 +1,16 @@
+{
+  "short_name": "AutoZap",
+  "name": "AutoZap AI - Automação WhatsApp",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/124/124034.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#25D366",
+  "background_color": "#f0f2f5"
+}

@@ -2,39 +2,43 @@
 import { GoogleGenAI } from "@google/genai";
 
 export class GeminiAutomationService {
-  private ai: GoogleGenAI;
-
-  constructor() {
-    this.ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
+  private getApiKey(): string {
+    try {
+      return typeof process !== 'undefined' ? process.env.API_KEY || '' : '';
+    } catch { return ''; }
   }
 
   async generateReply(instruction: string, history: { role: 'user' | 'model', text: string }[], userMessage: string): Promise<string> {
+    const apiKey = this.getApiKey();
+    if (!apiKey) return "Sistema de IA em manutenção. Chave de API ausente.";
+
     try {
-      const response = await this.ai.models.generateContent({
+      const ai = new GoogleGenAI({ apiKey });
+      const response = await ai.models.generateContent({
         model: 'gemini-3-flash-preview',
         contents: [
           ...history.map(h => ({ 
-            role: h.role === 'user' ? 'user' : 'model', 
+            role: h.role, 
             parts: [{ text: h.text }] 
           })),
           { role: 'user', parts: [{ text: userMessage }] }
         ],
         config: {
-          systemInstruction: `Você é um assistente virtual angolano altamente eficiente operando via WhatsApp. 
-          Sua personalidade é baseada nesta instrução: "${instruction}". 
-          Diretrizes:
-          1. Use um português claro e profissional (padrão de Angola).
-          2. Seja extremamente conciso (ideal para WhatsApp).
-          3. Nunca diga que é uma inteligência artificial a menos que seja relevante para o serviço.
-          4. Se o contexto permitir, seja caloroso conforme a cultura local.`,
-          temperature: 0.7,
+          systemInstruction: `Você é um atendente angolano profissional. 
+          Instrução do Agente: "${instruction}". 
+          REGRAS:
+          1. Português de Angola (formal/educado).
+          2. Seja muito conciso, ideal para leitura rápida no WhatsApp.
+          3. Se o cliente pedir dados de pagamento e eles estiverem no contexto, forneça-os claramente.
+          4. Nunca use emojis excessivos.`,
+          temperature: 0.6,
         },
       });
 
-      return response.text || "De momento não consigo processar o seu pedido. Por favor, tente novamente.";
+      return response.text || "Não consegui processar agora.";
     } catch (error) {
-      console.error("Gemini Automation Error:", error);
-      return "Estamos com dificuldades técnicas. Por favor, contacte o suporte ou aguarde uns instantes.";
+      console.error("Gemini Error:", error);
+      return "Estou a processar muitas mensagens. Por favor, aguarde um momento.";
     }
   }
 }

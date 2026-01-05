@@ -19,7 +19,7 @@ export interface Message {
   id: string;
   sender: 'user' | 'bot' | 'customer';
   content: string;
-  timestamp: Date;
+  timestamp: string; // ISO string para serialização fácil
 }
 
 export interface Conversation {
@@ -27,7 +27,7 @@ export interface Conversation {
   contactName: string;
   contactNumber: string;
   lastMessage: string;
-  timestamp: Date;
+  timestamp: string;
   unread: number;
   messages: Message[];
   agentId?: string;
@@ -35,7 +35,7 @@ export interface Conversation {
 
 export interface LogEntry {
   id: string;
-  timestamp: Date;
+  timestamp: string;
   type: 'info' | 'success' | 'warning' | 'error';
   message: string;
 }
